@@ -1,0 +1,110 @@
+export const cryptoAssets = [
+  {
+    id: 1,
+    chainId: 1,
+    address: '0x6c862f803ff42a97d4a483ab761256ad8c90f4f8',
+    name: 'Bitcoin',
+    symbol: 'BTC',
+    decimals: 18,
+    logoURI: '/images/cryptos/btc.svg',
+    price: 1300,
+    balanceChange: -0.15,
+    balance: 0.1
+  },
+  {
+    id: 2,
+    chainId: 1,
+    address: '0x6c862f803ff42a97d4a483ab761256ad8c90f4f8',
+    name: 'Ethereum',
+    symbol: 'ETH',
+    decimals: 18,
+    logoURI: '/images/cryptos/eth.svg',
+    price: 1300,
+    balanceChange: +0.15,
+    balance: 0.1
+  },
+  {
+    id: 3,
+    chainId: 1,
+    address: '0x6c862f803ff42a97d4a483ab761256ad8c90f4f8',
+    name: 'Solana',
+    symbol: 'XLS',
+    decimals: 18,
+    logoURI: '/images/cryptos/sol.svg',
+    price: 1300,
+    balanceChange: +0.15,
+    balance: 0.1
+  },
+  {
+    id: 4,
+    chainId: 1,
+    address: '0x6c862f803ff42a97d4a483ab761256ad8c90f4f8',
+    name: 'Doge',
+    symbol: 'DOGE',
+    decimals: 18,
+    logoURI: '/images/cryptos/doge.svg',
+    price: 1300,
+    balanceChange: -0.15,
+    balance: 0.1
+  },
+  {
+    id: 5,
+    chainId: 1,
+    address: '0x6c862f803ff42a97d4a483ab761256ad8c90f4f8',
+    name: 'Cadano',
+    symbol: 'ADA',
+    decimals: 18,
+    logoURI: '/images/cryptos/ada.svg',
+    price: 1300,
+    balanceChange: +0.15,
+    balance: 0.1
+  },
+  {
+    id: 6,
+    chainId: 1,
+    address: '0x6c862f803ff42a97d4a483ab761256ad8c90f4f8',
+    name: 'AMP',
+    symbol: 'AMP',
+    decimals: 18,
+    logoURI: '/images/cryptos/amp.svg',
+    price: 1300,
+    balanceChange: +0.15,
+    balance: 0.1
+  },
+  {
+    id: 7,
+    chainId: 1,
+    address: '0x6c862f803ff42a97d4a483ab761256ad8c90f4f8',
+    name: 'ADX',
+    symbol: 'ADX',
+    decimals: 18,
+    logoURI: '/images/cryptos/ada.svg',
+    price: 1300,
+    balanceChange: -0.15,
+    balance: 0.1
+  },
+  {
+    id: 8,
+    chainId: 1,
+    address: '0x6c862f803ff42a97d4a483ab761256ad8c90f4f8',
+    name: 'Binance',
+    symbol: 'BNB',
+    decimals: 18,
+    logoURI: '/images/cryptos/bnb.svg',
+    price: 1300,
+    balanceChange: -0.15,
+    balance: 0.1
+  },
+  {
+    id: 9,
+    chainId: 1,
+    address: '0x6c862f803ff42a97d4a483ab761256ad8c90f4f8',
+    name: 'Safemoon',
+    symbol: 'SAFEMOON',
+    decimals: 18,
+    logoURI: '/images/cryptos/safemoon.svg',
+    price: 1300,
+    balanceChange: +0.15,
+    balance: 0.1
+  }
+]

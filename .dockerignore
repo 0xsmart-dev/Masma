@@ -1,0 +1,3 @@
+# these files are ignored
+.next
+node_modules

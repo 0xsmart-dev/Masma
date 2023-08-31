@@ -1,0 +1,195 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    Int            @id @default(autoincrement())
+  email                 String         @unique
+  username              String?
+  issuer                String?
+  oauthProvider         String?
+  phoneNumber           String?
+  avatar                String?
+  profileId             String         @unique
+  balance               Float          @default(0)
+  magicWalletAddress    String         @unique
+  smartWalletAddress    String         @unique
+  privateKey            String?
+  inviteCode            String
+  bio                   String?        @db.Text
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  sentFriendships       Friendship[]   @relation(name: "UserSender")
+  receivedFriendships   Friendship[]   @relation(name: "UserReceiver")
+  followings            Following[]    @relation(name: "FollowingSender")
+  followers             Following[]    @relation(name: "FollowingReceiver")
+  sentNotifications     Notification[] @relation(name: "NotificationFrom")
+  receivedNotifications Notification[] @relation(name: "NotificationTo")
+  referalUsers          Referal[]      @relation(name: "ReferalUsers")
+  sentTransfers         Transfer[]     @relation(name: "FromUser")
+  receivedTransfers     Transfer[]     @relation(name: "ToUser")
+  deposits              Deposit[]
+  fromMessages          Message[]      @relation(name: "MsgFromUser")
+  toMessages            Message[]      @relation(name: "MsgToUser")
+}
+
+enum ReferalStatus {
+  ACCEPTED
+  REJECTED
+  PENDING
+}
+
+model Referal {
+  id         Int           @id @default(autoincrement())
+  userId     Int
+  referredBy String?
+  status     ReferalStatus
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  userInfo   User          @relation(name: "ReferalUsers", fields: [userId], references: [id])
+}
+
+model Friendship {
+  id         Int              @id @default(autoincrement())
+  senderId   Int
+  receiverId Int
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  sender     User             @relation(name: "UserSender", fields: [senderId], references: [id])
+  receiver   User             @relation(name: "UserReceiver", fields: [receiverId], references: [id])
+  status     FriendshipStatus @default(value: PENDING)
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  CANCELLED
+}
+
+enum NotificationType {
+  RECEIVE_MONEY
+  SENT_MONEY
+  DEPOSIT_MONEY
+  MESSAGE
+  FOLLOW
+  UNFOLLOW
+  ACCEPT_INVITE
+}
+
+model Notification {
+  id         Int              @id @default(autoincrement())
+  fromUserId Int
+  toUserId   Int
+  type       NotificationType
+  body       Json
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  readAt     DateTime?
+  fromUser   User             @relation(name: "NotificationFrom", fields: [fromUserId], references: [id])
+  toUser     User             @relation(name: "NotificationTo", fields: [toUserId], references: [id])
+}
+
+model Avatar {
+  id        Int      @id @default(autoincrement())
+  url       String   @unique
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum DepositStatusType {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+model Deposit {
+  id              Int               @id @default(autoincrement())
+  status          DepositStatusType @default(value: COMPLETED)
+  address         String
+  amount          Float
+  transactionHash String            @unique
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  cancelReason    String?
+  depositUser     User              @relation(fields: [address], references: [smartWalletAddress])
+}
+
+model Following {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  followerId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(name: "FollowingReceiver", fields: [userId], references: [id])
+  follower   User     @relation(name: "FollowingSender", fields: [followerId], references: [id])
+}
+
+model Message {
+  id         Int       @id @default(autoincrement())
+  fromUserId Int
+  toUserId   Int
+  content    String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  readAt     DateTime?
+  fromUser   User      @relation(name: "MsgFromUser", fields: [fromUserId], references: [id])
+  toUser     User      @relation(name: "MsgToUser", fields: [toUserId], references: [id])
+}
+
+enum TransferStatus {
+  PENDING
+  COMPLETED
+}
+
+model Transfer {
+  id              Int            @id @default(autoincrement())
+  fromId          Int
+  toId            Int
+  amount          Float
+  fee             Float
+  chainId         Int
+  tokenAddress    String
+  paymentPurpose  String?
+  transactionHash String?
+  status          TransferStatus @default(value: PENDING)
+  createdAt       DateTime       @default(now())
+  fromUser        User           @relation(name: "FromUser", fields: [fromId], references: [id])
+  toUser          User           @relation(name: "ToUser", fields: [toId], references: [id])
+}
+
+model Token {
+  id      Int     @id @default(autoincrement())
+  name    String
+  symbol  String
+  chainId Int
+  address String
+  logoUrl String?
+}
+
+enum ActivityType {
+  SIGN_UP
+  FOLLOW
+  UNFOLLOW
+  TRANSFER
+  DEPOSIT
+  ACCEPT_INVITE
+}
+
+model Activity {
+  id              Int          @id @default(autoincrement())
+  userId          Int
+  activityType    ActivityType
+  activityContent Json
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
